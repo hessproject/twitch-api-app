@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html >
+  <head>
+    <meta charset="UTF-8">
+    <title>Twitch API App</title>
+    
+    
+    <link rel="stylesheet" href="css/normalize.css">
+
+    <link rel='stylesheet prefetch' href='http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css'>
+
+        <link rel="stylesheet" href="css/style.css">
+
+    
+    
+    
+  </head>
+
+  <body>
+
+    <body>
+<div ng-app='twitchApp' class='container'>
+  <div ng-controller='twitchController'>
+    <img src='http://www.gamechops.com/wp-content/uploads/2015/03/twitch-logo-black.png' height='90'/>
+    <div class='row' id='toolbar'>
+      <form role='form'>
+        <div class='col-md-6 col-xs-12'>
+          <div class='input-group input-group-sm'>
+            <input type='text' class='form-control' id='addInput' placeholder='Add Streamer'>
+            <span class='input-group-btn'>
+              <button type='button' class='btn btn-success' id='addButton' onclick='addStreamer'>+</button>
+            </span>
+            </input>
+          </div>
+        </div>
+        <div class='col-md-6 col-xs-12'>
+          <div class='input-group input-group-sm'>
+            <input type='text' class='form-control' ng-model='searchText' placeholder='Search' aria-describedby='sizing-addon3'>
+            <span class='input-group-addon' id='sizing-addon3'>
+              <span class='glyphicon glyphicon-search'></span>
+            </span>
+          </div>
+        </div>
+      </form>
+    </div>
+  <p id='addError'></p>
+  <div class='row'>
+    <div class="btn-group btn-group-justified" role="group" id='onlineStatus'>
+      <div class='btn-group'>
+        <button class='btn btn-default active' id='allButton' ng-click='listAll()'>All</button>
+      </div>
+      <div class='btn-group'>
+        <button class='btn btn-default' id="onButton" ng-click='listOn()'>Online</button>
+      </div>
+      <div class='btn-group'>
+        <button class='btn btn-default' id='offButton' ng-click='listOff()'>Offline</button>
+      </div>
+      <!-- TODO: add sort options -->
+    </div>
+  </div>
+    <div id='streamList' ng-repeat='channel in activeList | orderBy: "name"| filter:searchText' class='row center-block'>
+      <a ng-href='{{channel.link}}' target='_blank' id='streamLink' ng-attr-title='{{channel.status}}'>
+        <div class='col-md-2' id='picDiv'>
+          <img id='userLogo' ng-src='{{channel.image}}' />
+        </div>
+        <div class='channelInfo col-md-8'>
+          <h4>{{channel.name}}</h4>
+          <p id='game'>{{channel.game}}</p>
+        </div>
+        </a>
+        <div class='indicator col-md-2' id='buttonDiv'>
+          <button class='btn btn-danger pull-right' id='deleteButton' ng-click='delete(channel)'>X</button>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+    <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+<script src='http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.14/angular.min.js'></script>
+
+        <script src="js/index.js"></script>
+
+    
+    
+    
+  </body>
+</html>

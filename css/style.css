@@ -1,0 +1,82 @@
+* {
+  margin: 0 auto;
+  text-align: center;
+  font-family: helvetica;
+}
+body{
+  padding-top: 2px;
+}
+#deleteButton {
+  margin-right: -1px;
+  margin-top: -1px;
+  border-right: 0px;
+  border: 1px solid grey;
+}
+
+#streamLink {
+  border: none;
+  outline: none;
+  text-decoration: none;
+  color: inherit;
+}
+
+#toolbar {
+  margin: 0 auto;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  max-width: 40%;
+}
+
+#streamList {
+  margin-top: 5px;
+  margin-bottom: 3px;
+  border: 1px solid grey;
+  background: white;
+  max-width: 40%;
+  text-align: center;
+}
+
+#onlineStatus {
+  max-width: 39%;
+}
+
+#addError {
+  display: none;
+  text-align: center;
+}
+
+#userLogo {
+  width: 75px;
+  height: 75px;
+}
+
+#picDiv {
+  padding-right: 0px!important;
+  padding-left: 0px!important;
+  margin-left: 0px!important;
+}
+
+#buttonDiv {
+  padding-right: 0px!important;
+  margin-right: 0px!important;
+}
+
+.btn-danger {
+  border-radius: 0px!important;
+}
+
+.channelInfo {
+  max-height: 75px;
+}
+
+input:focus::-webkit-input-placeholder { 
+  color:transparent; 
+}
+input:focus:-moz-placeholder { 
+  color:transparent; 
+}
+input:focus::-moz-placeholder { 
+  color:transparent; 
+}
+input:focus:-ms-input-placeholder { color:transparent; 
+}
