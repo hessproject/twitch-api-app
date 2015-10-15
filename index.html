@@ -47,15 +47,14 @@
   <div class='row'>
     <div class="btn-group btn-group-justified" role="group" id='onlineStatus'>
       <div class='btn-group'>
-        <button class='btn btn-default active' id='allButton' ng-click='listAll()'>All</button>
+        <button class='btn btn-default active' id='allButton' ng-click='listBy("all")'>All</button>
       </div>
       <div class='btn-group'>
-        <button class='btn btn-default' id="onButton" ng-click='listOn()'>Online</button>
+        <button class='btn btn-default' id="onlineButton" ng-click='listBy("online")'>Online</button>
       </div>
       <div class='btn-group'>
-        <button class='btn btn-default' id='offButton' ng-click='listOff()'>Offline</button>
+        <button class='btn btn-default' id='offlineButton' ng-click='listBy("offline")'>Offline</button>
       </div>
-      <!-- TODO: add sort options -->
     </div>
   </div>
     <div id='streamList' ng-repeat='channel in activeList | orderBy: "name"| filter:searchText' class='row center-block'>
