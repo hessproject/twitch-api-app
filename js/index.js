@@ -1,50 +1,23 @@
 var app = angular.module('twitchApp', []);
 
 app.controller('twitchController', ['$scope', '$http', function($scope, $http) {
+  //variables for API call
   var prefix = 'https://api.twitch.tv/kraken/';
   var str = 'streams/';
   var usr = 'users/';
   var callback = '?callback=JSON_CALLBACK'; //to avoid same origin error
+  
+  //creating arrays for each online status and variable for list currently being displayed
   $scope.all = [];
   $scope.online = [];
   $scope.offline = [];
   $scope.activeList = $scope.all; //default to all, change with buttons
+  
+  //default streamers
   $scope.streamers = ["freecodecamp", "storbeck", "terakilobyte", "habathcx", "robotcaleb", "comster404", "brunofin", "thomasballinger", "noobs2ninjas", "beohoff", "medrybw", ]; //keep lowercase for existing user check when adding streamers
-  $scope.delete = function(channel) {
-    var idxAll = $scope.all.indexOf(channel);
-    var idxOnline = $scope.online.indexOf(channel);
-    var idxOffline = $scope.offline.indexOf(channel);
-    if (confirm('Are you sure you want to remove this streamer?') === true) {
-      $scope.all.splice(idxAll, 1);
-      if (idxOnline !== -1) {
-        $scope.online.splice(idxOnline, 1);
-      }
-      if (idxOffline !== -1) {
-        $scope.offline.splice(idxOffline, 1);
-      }
-    }
-  };
-
-  function removeActive() {
-    $('#onlineStatus button').removeClass('active');
-  }
-  $scope.listAll = function() {
-    removeActive();
-    $('#allButton').addClass('active')
-    $scope.activeList = $scope.all;
-  }
-  $scope.listOn = function() {
-    removeActive();
-    $('#onButton').addClass('active')
-    $scope.activeList = $scope.online;
-  }
-  $scope.listOff = function() {
-    removeActive();
-    $('#offButton').addClass('active')
-    $scope.activeList = $scope.offline;
-  }
-
-  function newStreamer(stream) {
+  
+  //functions for adding and removing streamers
+  $scope.addStreamer = function(stream) {
     var channel = {};
     $http.jsonp(prefix + str + stream + callback)
       .success(function(data) {
@@ -70,11 +43,9 @@ app.controller('twitchController', ['$scope', '$http', function($scope, $http) {
                 channel.image = 'http://placehold.it/150x150'
               }
               channel.status = "Not streaming";
-              //console.log(channel.name, channel.game, channel.image, channel.status);
             });
         }
         $scope.all.push(channel);
-        //console.log("pushing: " + channel);
         if (data.stream === null) {
           $scope.offline.push(channel);
         } else {
@@ -82,14 +53,54 @@ app.controller('twitchController', ['$scope', '$http', function($scope, $http) {
         }
       })
   }
+  $scope.delete = function(channel) {
+    var idxAll = $scope.all.indexOf(channel);
+    var idxOnline = $scope.online.indexOf(channel);
+    var idxOffline = $scope.offline.indexOf(channel);
+    if (confirm('Are you sure you want to remove this streamer?') === true) {
+      $scope.all.splice(idxAll, 1);
+      if (idxOnline !== -1) {
+        $scope.online.splice(idxOnline, 1);
+      }
+      if (idxOffline !== -1) {
+        $scope.offline.splice(idxOffline, 1);
+      }
+    }
+  };
+  
+  //populate list with default streamers
   $scope.streamers.forEach(function(stream) {
-    newStreamer(stream);
+    $scope.addStreamer(stream);
   });
+  
+  // All/Online/Offline button functionality
+  $scope.removeActive = function() {
+    $('#onlineStatus button').removeClass('active');
+  }
+  $scope.changeList = function(list){
+    console.log("changelist is passed: "+ list);
+    switch(list){
+      case "all": $scope.activeList = $scope.all;
+        break;
+      case "online": $scope.activeList = $scope.online;
+        break;
+      case "offline": $scope.activeList = $scope.offline;
+        break;
+      default: $scope.activeList = $scope.all;
+        break;
+    }
+  }
+  $scope.listBy = function(list) {
+    $scope.removeActive();
+    $("#"+list+"Button").addClass('active');
+    $scope.changeList(list);
+  }
 
+  //adding a new streamer to existing list
   $('#addButton').click(function() {
     var stream = document.getElementById('addInput').value.toLowerCase();
     if ($scope.streamers.indexOf(stream) === -1) {
-      newStreamer(stream);
+      $scope.addStreamer(stream);
       $scope.streamers.push(stream);
     } else {
       $('#addError').text('User already exists!').show();
