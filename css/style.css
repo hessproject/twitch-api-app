@@ -78,5 +78,6 @@ input:focus:-moz-placeholder {
 input:focus::-moz-placeholder { 
   color:transparent; 
 }
-input:focus:-ms-input-placeholder { color:transparent; 
+input:focus:-ms-input-placeholder { 
+  color:transparent; 
 }
