@@ -16,27 +16,37 @@ app.controller('twitchController', ['$scope', '$http', function($scope, $http) {
   //default streamers
   $scope.streamers = ["freecodecamp", "storbeck", "terakilobyte", "habathcx", "robotcaleb", "comster404", "brunofin", "thomasballinger", "noobs2ninjas", "beohoff", "medrybw", ]; //keep lowercase for existing user check when adding streamers
   
-  //functions for adding and removing streamers
+  //add a streamer to the list
   $scope.addStreamer = function(stream) {
     var channel = {};
+    
+    //for users that are currently streaming, use the stream API
     $http.jsonp(prefix + str + stream + callback)
       .success(function(data) {
+        
+        //get link to streamer URL
         channel.link = 'http://twitch.tv/' + stream;
+        
         if (data.stream !== null) {
           channel.name = data.stream.channel.display_name;
           channel.game = data.stream.channel.game;
+          
+          //get user logo, if no logo, replace with gray placeholder image
           if (data.logo !== null) {
             channel.image = data.stream.channel.logo;
           } else {
             channel.image = 'http://placehold.it/100x100'
           }
+          
           channel.status = data.stream.channel.status.substr(0, 40) + '...';
-          //console.log(channel.name, channel.game, channel.image, channel.status);
+          
+          //for users that are offline/not currently streaming, use the user API
         } else {
           $http.jsonp(prefix + usr + stream + callback) //if user is not streaming, get data by user
             .success(function(data) {
               channel.name = data.display_name;
               channel.game = "Offline";
+              
               if (data.logo !== null) {
                 channel.image = data.logo;
               } else {
@@ -45,6 +55,8 @@ app.controller('twitchController', ['$scope', '$http', function($scope, $http) {
               channel.status = "Not streaming";
             });
         }
+        
+        //sort streamer into online/offline
         $scope.all.push(channel);
         if (data.stream === null) {
           $scope.offline.push(channel);
@@ -53,6 +65,8 @@ app.controller('twitchController', ['$scope', '$http', function($scope, $http) {
         }
       })
   }
+  
+  //remove a streamer from the list
   $scope.delete = function(channel) {
     var idxAll = $scope.all.indexOf(channel);
     var idxOnline = $scope.online.indexOf(channel);
@@ -96,7 +110,7 @@ app.controller('twitchController', ['$scope', '$http', function($scope, $http) {
     $scope.changeList(list);
   }
 
-  //adding a new streamer to existing list
+  //functionality for the add streamer box
   $('#addButton').click(function() {
     var stream = document.getElementById('addInput').value.toLowerCase();
     if ($scope.streamers.indexOf(stream) === -1) {
